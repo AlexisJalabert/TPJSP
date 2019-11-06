@@ -26,5 +26,22 @@ public class DAO {
         this.mySource = datasource;
     }
     
+    public List<CodeDiscount> allData() throws Exception {
+        List<CodeDiscount> resultat = new LinkedList();
+        String sql = "SELECT * FROM DISCOUNT_CODE";
+        try (Connection myConnection = mySource.getConnection();
+             PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                String code = rs.getString("DISCOUNT_CODE");
+                float taux = rs.getFloat("RATE");
+                CodeDiscount element = new CodeDiscount(code, taux);
+                resultat.add(element);
+            }
+        } catch(Exception ex) {
+            
+        }
+        return resultat;
+    }
     
 }
