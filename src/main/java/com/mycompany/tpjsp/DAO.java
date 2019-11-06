@@ -26,6 +26,11 @@ public class DAO {
         this.mySource = datasource;
     }
     
+    /**
+     * 
+     * @return
+     * @throws Exception 
+     */
     public List<CodeDiscount> allData() throws Exception {
         List<CodeDiscount> resultat = new LinkedList();
         String sql = "SELECT * FROM DISCOUNT_CODE";
@@ -38,8 +43,29 @@ public class DAO {
                 CodeDiscount element = new CodeDiscount(code, taux);
                 resultat.add(element);
             }
-        } catch(Exception ex) {
-            
+        }
+        return resultat;
+    }
+    
+    public int ajouterCodeDiscount(String code, float taux) throws Exception {
+        int resultat = 0;
+        String sql = "INSERT INTO DISCOUNT_CODE VALUES (?,?)";
+        try (Connection myConnection = mySource.getConnection();
+                PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+            stmt.setString(1, code);
+            stmt.setFloat(2,taux);
+            resultat = stmt.executeUpdate();
+        }
+        return resultat;
+    }
+    
+    public int supprCodeDiscount(String code) throws Exception {
+        int resultat = 0;
+        String sql = "DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE = ?";
+        try (Connection myConnection = mySource.getConnection();
+                PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+            stmt.setString(1,code);
+            resultat = stmt.executeUpdate();
         }
         return resultat;
     }
